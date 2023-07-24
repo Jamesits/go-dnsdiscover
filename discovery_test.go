@@ -79,7 +79,7 @@ func TestQueryServiceEndpointSanity(t *testing.T) {
 	assert.EqualValues(t, "connect.2b2t.org.", srv[0].Target)
 	t.Logf("Services: \n")
 	for _, s := range srv {
-		t.Logf("\t%v\n", s)
+		t.Logf("\t%v %s\n", s, URLFromSRV(s, "minecraft"))
 	}
 
 	// google.com uses an A or AAAA record
@@ -88,6 +88,6 @@ func TestQueryServiceEndpointSanity(t *testing.T) {
 	assert.NotZero(t, len(srv))
 	t.Logf("Services: \n")
 	for _, s := range srv {
-		t.Logf("\t%v\n", s)
+		t.Logf("\t%v %s\n", s, URLFromSRV(s, "https"))
 	}
 }

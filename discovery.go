@@ -1,13 +1,17 @@
 package go_dnsdiscover
 
 import (
+	"fmt"
 	"net"
+	"net/url"
 	"strings"
 )
 
 var portList = map[string]map[string]int{
 	"tcp": {
 		"minecraft": 25565,
+		"ws":        80,
+		"wss":       443,
 	},
 }
 
@@ -77,6 +81,10 @@ func fakeSRV(host string, service string, proto string) (ret []*net.SRV, err err
 		return nil, err
 	}
 
+	if !strings.HasSuffix(host, ".") {
+		host = host + "."
+	}
+
 	ret = append(ret, &net.SRV{
 		Target:   host,
 		Port:     uint16(port),
@@ -119,7 +127,7 @@ func QueryServiceEndpoint(host string, service string, proto string) (ret []*net
 		for _, d := range ds {
 			var fqdn string
 			if host != "" {
-				fqdn = strings.Join([]string{host, d}, ".")
+				fqdn = host + "." + d
 			} else {
 				fqdn = d
 			}
@@ -133,4 +141,13 @@ func QueryServiceEndpoint(host string, service string, proto string) (ret []*net
 
 direct:
 	return querySingleServiceEndpoint(host, service, proto)
+}
+
+func URLFromSRV(srv *net.SRV, service string) *url.URL {
+	host := strings.TrimRight(srv.Target, ".")
+
+	return &url.URL{
+		Scheme: service,
+		Host:   fmt.Sprintf("%s:%d", host, srv.Port),
+	}
 }
