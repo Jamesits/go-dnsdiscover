@@ -5,7 +5,9 @@
 DNS-based service discovery support library.
 
 Provides:
-- Hostname retrieval (in short form, FQDN/full form)
+- Hostname retrieval
+  - short form
+  - FQDN/full form
 - SRV-based service lookup, with A/AAAA based fallback
 
 TODO:
