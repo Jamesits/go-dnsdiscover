@@ -65,6 +65,27 @@ func queryByIP(host string, service string, proto string) (ret []*net.SRV, err e
 	return ret, nil
 }
 
+func fakeSRV(host string, service string, proto string) (ret []*net.SRV, err error) {
+	// try resolve it first
+	ips, err := net.LookupIP(host)
+	if ips == nil || len(ips) == 0 {
+		return nil, err
+	}
+
+	port, err := LookupPort(proto, service)
+	if err != nil {
+		return nil, err
+	}
+
+	ret = append(ret, &net.SRV{
+		Target:   host,
+		Port:     uint16(port),
+		Priority: 0,
+		Weight:   0,
+	})
+	return
+}
+
 func queryBySRV(host string, service string, proto string) (ret []*net.SRV, err error) {
 	// https://www.ietf.org/rfc/rfc2782.txt
 	_, addrs, err := net.LookupSRV(service, proto, host)
@@ -77,7 +98,7 @@ func querySingleServiceEndpoint(host string, service string, proto string) (ret 
 		return
 	}
 
-	ret, err = queryByIP(host, service, proto)
+	ret, err = fakeSRV(host, service, proto)
 	if err == nil {
 		return
 	}
