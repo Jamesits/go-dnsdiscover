@@ -8,7 +8,7 @@ Provides:
 - Hostname retrieval
   - short form
   - FQDN/full form
-- SRV-based service lookup, with A/AAAA based fallback
+- SRV-based service lookup, with A/AAAA-based fallback
 
 TODO:
 - Provide a custom `*net.Resolver` - https://github.com/golang/go/issues/12503
