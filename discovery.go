@@ -11,6 +11,20 @@ var portList = map[string]map[string]int{
 	},
 }
 
+// AddPortAssignment assigns a service with a port.
+// Normally you should edit `/etc/services` for this, but there are cases where editing that file is impossible, then
+// you can do it here.
+// proto: "tcp" or "udp"
+// service: the name of the service, e.g. "https" or "ldap" or "minecraft".
+func AddPortAssignment(proto string, service string, port int) error {
+	if _, ok := portList[proto]; !ok {
+		portList[proto] = make(map[string]int)
+	}
+
+	portList[proto][service] = port
+	return nil
+}
+
 // LookupPort returns the port of a service.
 // proto: "tcp" or "udp"
 // service: the name of the service, e.g. "https" or "ldap"
