@@ -1,4 +1,4 @@
-module go-dnsdiscover
+module github.com/jamesits/go-dnsdiscover
 
 go 1.20
 
