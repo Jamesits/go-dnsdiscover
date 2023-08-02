@@ -151,3 +151,7 @@ func URLFromSRV(srv *net.SRV, service string) *url.URL {
 		Host:   fmt.Sprintf("%s:%d", host, srv.Port),
 	}
 }
+
+func QueryTXT(host string) (ret []string, err error) {
+	return net.LookupTXT(host)
+}
